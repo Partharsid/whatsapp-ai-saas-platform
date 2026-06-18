@@ -1,0 +1,264 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  name          String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  subscription      Subscription?
+  apiKeyConfig      ApiKeyConfig?
+  whatsappSession   WhatsAppSession?
+  contacts          Contact[]
+  conversations     Conversation[]
+  systemPrompts     SystemPrompt[]
+  googleSheetConfig GoogleSheetConfig?
+  broadcasts        BroadcastCampaign[]
+  scheduledMessages ScheduledMessage[]
+  templates         Template[]
+  teamMembers       TeamMember[]       @relation("OwnerToMembers")
+  memberOf          TeamMember[]       @relation("UserToMembers")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Subscription {
+  id                   String   @id @default(uuid())
+  userId               String   @unique
+  planType             PlanType @default(STARTER)
+  razorpayCustomerId   String?
+  razorpaySubscriptionId String?
+  status               SubStatus @default(INACTIVE)
+  currentPeriodEnd     DateTime?
+  
+  user                 User     @relation(fields: [userId], references: [id])
+}
+
+enum PlanType {
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum SubStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+  PAST_DUE
+}
+
+model ApiKeyConfig {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  openRouterKey  String?  // encrypted
+  useServerKey   Boolean  @default(true)
+  selectedModel  String   @default("meta-llama/llama-3.1-8b-instruct:free")
+  
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model WhatsAppSession {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  phoneNumber  String?
+  sessionData  String?   // JSON string of auth state
+  status       WaStatus  @default(DISCONNECTED)
+  lastActive   DateTime?
+  
+  user         User      @relation(fields: [userId], references: [id])
+}
+
+enum WaStatus {
+  CONNECTED
+  DISCONNECTED
+  QR_PENDING
+}
+
+model Contact {
+  id             String    @id @default(uuid())
+  userId         String
+  whatsAppId     String
+  phoneNumber    String
+  name           String?
+  profilePicUrl  String?
+  tags           String[]
+  notes          String?
+  isBlacklisted  Boolean   @default(false)
+  firstContactAt DateTime  @default(now())
+  lastMessageAt  DateTime?
+
+  user           User           @relation(fields: [userId], references: [id])
+  conversations  Conversation[]
+
+  @@unique([userId, phoneNumber])
+}
+
+model Conversation {
+  id           String     @id @default(uuid())
+  userId       String
+  contactId    String
+  status       ConvStatus @default(ACTIVE)
+  summary      String?
+  sentiment    String?
+  startedAt    DateTime   @default(now())
+  closedAt     DateTime?
+
+  user         User       @relation(fields: [userId], references: [id])
+  contact      Contact    @relation(fields: [contactId], references: [id])
+  messages     Message[]
+  chatMemory   ChatMemory?
+}
+
+enum ConvStatus {
+  ACTIVE
+  CLOSED
+  ARCHIVED
+}
+
+model Message {
+  id             String    @id @default(uuid())
+  conversationId String
+  direction      Direction
+  content        String
+  mediaUrl       String?
+  mediaType      String?
+  isAiGenerated  Boolean   @default(false)
+  timestamp      DateTime  @default(now())
+  status         MsgStatus @default(SENT)
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
+
+enum Direction {
+  INBOUND
+  OUTBOUND
+}
+
+enum MsgStatus {
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+model ChatMemory {
+  id             String    @id @default(uuid())
+  conversationId String    @unique
+  contextWindow  String    // JSON array of recent messages
+  topicSummary   String?
+  lastUpdatedAt  DateTime  @updatedAt
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
+
+model SystemPrompt {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  content   String
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model GoogleSheetConfig {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  sheetId        String
+  sheetName      String
+  isActive       Boolean  @default(true)
+  lastSyncAt     DateTime?
+
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model BroadcastCampaign {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  message     String
+  mediaUrl    String?
+  recipients  String[] // Array of phone numbers
+  status      CampStatus @default(DRAFT)
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  stats       String?  // JSON
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+enum CampStatus {
+  DRAFT
+  SCHEDULED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model ScheduledMessage {
+  id          String   @id @default(uuid())
+  userId      String
+  contactId   String
+  content     String
+  mediaUrl    String?
+  scheduledAt DateTime
+  status      SchedStatus @default(PENDING)
+  sentAt      DateTime?
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+enum SchedStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+model Template {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  category  String
+  content   String
+  variables String[]
+  mediaUrl  String?
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model TeamMember {
+  id          String   @id @default(uuid())
+  ownerId     String
+  memberId    String
+  role        TeamRole @default(AGENT)
+  permissions String[]
+
+  owner       User     @relation("OwnerToMembers", fields: [ownerId], references: [id])
+  member      User     @relation("UserToMembers", fields: [memberId], references: [id])
+  
+  @@unique([ownerId, memberId])
+}
+
+enum TeamRole {
+  ADMIN
+  AGENT
+  VIEWER
+}
