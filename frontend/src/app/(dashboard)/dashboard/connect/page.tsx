@@ -1,123 +1,115 @@
 "use client"
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/auth-context";
-import { socketService } from "@/lib/socket";
-import { api } from "@/lib/api";
-
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { useState, useEffect } from "react"
+import { useAuth } from "@/lib/auth-context"
+import { socketService } from "@/lib/socket"
+import { api } from "@/lib/api"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { Smartphone, QrCode, HelpCircle } from "lucide-react"
 
 export default function ConnectPage() {
-  const { user } = useAuth();
-  const [qrCode, setQrCode] = useState<string | null>(null);
-  const [status, setStatus] = useState<string>("DISCONNECTED");
-  const [loading, setLoading] = useState(false);
+  const { user } = useAuth()
+  const [qrCode, setQrCode] = useState<string | null>(null)
+  const [status, setStatus] = useState<string>("DISCONNECTED")
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) return
 
-    // Fetch initial status
     api.get("/dashboard/whatsapp/status").then((res) => {
-      setStatus(res.status);
-    }).catch(console.error);
+      setStatus(res.status)
+    }).catch(console.error)
 
-    // Connect socket
-    const socket = socketService.connect(user.id);
-    if (!socket) return;
+    const socket = socketService.connect(user.id)
+    if (!socket) return
 
     socket.on("qr-code", (dataUrl: string) => {
-      setQrCode(dataUrl);
-      setStatus("QR_PENDING");
-      setLoading(false);
-    });
+      setQrCode(dataUrl)
+      setStatus("QR_PENDING")
+      setLoading(false)
+    })
 
     socket.on("connection-status", (newStatus: string) => {
-      setStatus(newStatus.toUpperCase());
+      setStatus(newStatus.toUpperCase())
       if (newStatus === "connected") {
         toast.success("WhatsApp Connected!", {
           description: "Your account is now linked successfully.",
-        });
+        })
       }
-    });
+    })
 
     return () => {
-      socket.off("qr-code");
-      socket.off("connection-status");
-    };
-  }, [user]);
+      socket.off("qr-code")
+      socket.off("connection-status")
+    }
+  }, [user])
 
   const handleGenerateQR = async () => {
-    if (!user) return;
-    setLoading(true);
+    if (!user) return
+    setLoading(true)
     try {
-      await api.post("/whatsapp/connect", { userId: user.id });
-      toast.info("Generating QR...", { description: "Please wait a moment." });
+      await api.post("/whatsapp/connect", { userId: user.id })
+      toast.info("Generating QR...", { description: "Please wait a moment." })
     } catch (err: any) {
-      toast.error(err.message || "Failed to initialize session");
-      setLoading(false);
+      toast.error(err.message || "Failed to initialize session")
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-signifier text-[44px] text-ink leading-[1.1] tracking-[-0.66px]">WhatsApp Connect</h1>
-        <p className="font-sohne text-[16px] text-ash leading-[1.38] mt-3">
+        <h1 className="text-3xl font-semibold tracking-tight">WhatsApp Connect</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Link your WhatsApp Business account to start automating conversations.
         </p>
       </div>
-      
+
       <Card className="max-w-xl mx-auto mt-12 overflow-hidden">
         <div className="h-2 bg-gradient-to-r from-apricot-wash via-sky-wash to-apricot-wash" />
         <CardHeader className="text-center pt-10">
-          <div className="w-20 h-20 bg-fog rounded-full flex items-center justify-center mx-auto mb-6 border border-dove/30 shadow-sm">
-            <span className="text-3xl opacity-70 grayscale">📱</span>
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted mx-auto mb-6">
+            <Smartphone className="h-8 w-8 text-muted-foreground" />
           </div>
-          <CardTitle className="text-[28px]">Connect your number</CardTitle>
-          <CardDescription className="text-[16px] max-w-sm mx-auto mt-2">
+          <CardTitle className="text-2xl">Connect your number</CardTitle>
+          <CardDescription className="max-w-sm mx-auto mt-2">
             Scan the QR code via your WhatsApp mobile app to link your account securely.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center pb-10">
-          <div className="w-64 h-64 bg-fog rounded-[16px] border border-dove/30 flex items-center justify-center shadow-subtle relative overflow-hidden">
+          <div className="w-64 h-64 bg-muted rounded-xl border flex items-center justify-center relative overflow-hidden">
             {status === "CONNECTED" ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-pure-white z-20">
-                <div className="w-16 h-16 bg-[#d1fae5] rounded-full flex items-center justify-center mb-4 text-[24px]">
-                  ✅
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-20">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-2xl">✓</span>
                 </div>
-                <span className="font-sohne text-[16px] font-[500] text-ink">Successfully Connected</span>
+                <span className="text-sm font-medium">Successfully Connected</span>
               </div>
             ) : qrCode ? (
               <img src={qrCode} alt="WhatsApp QR Code" className="w-[85%] h-[85%] object-contain z-10" />
             ) : (
-              <>
-                {/* Mock QR Code Pattern */}
-                <div className="absolute inset-4 grid grid-cols-6 grid-rows-6 gap-2 opacity-20">
-                  {Array.from({ length: 36 }).map((_, i) => (
-                    <div key={i} className={`bg-ink rounded-sm ${(i * 7) % 5 > 1 ? 'opacity-100' : 'opacity-0'}`} />
-                  ))}
-                </div>
-                {/* Corners */}
-                <div className="absolute top-4 left-4 w-12 h-12 border-4 border-ink rounded-sm opacity-50" />
-                <div className="absolute top-4 right-4 w-12 h-12 border-4 border-ink rounded-sm opacity-50" />
-                <div className="absolute bottom-4 left-4 w-12 h-12 border-4 border-ink rounded-sm opacity-50" />
-                
-                <span className="font-sohne text-[15px] font-[500] text-ink bg-pure-white/80 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm relative z-10">
+              <div className="flex flex-col items-center gap-3">
+                <QrCode className="h-12 w-12 text-muted-foreground/40" />
+                <span className="text-xs text-muted-foreground">
                   {status === "QR_PENDING" ? "Generating..." : "Click to generate"}
                 </span>
-              </>
+              </div>
             )}
           </div>
         </CardContent>
-        <CardFooter className="bg-fog/50 border-t border-dove/20 py-4 flex justify-between items-center">
-          <Button variant="link" className="text-ash hover:text-ink">Having trouble?</Button>
-          <Button onClick={handleGenerateQR} disabled={loading || status === "CONNECTED"}>
+        <CardFooter className="bg-muted/30 border-t py-4 flex justify-between">
+          <Button variant="link" className="gap-1 text-xs text-muted-foreground">
+            <HelpCircle className="h-3 w-3" />
+            Having trouble?
+          </Button>
+          <Button onClick={handleGenerateQR} disabled={loading || status === "CONNECTED"} className="gap-2">
+            <QrCode className="h-4 w-4" />
             {loading ? "Generating..." : status === "CONNECTED" ? "Connected" : "Generate QR Code"}
           </Button>
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }

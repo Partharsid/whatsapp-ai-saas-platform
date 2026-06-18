@@ -1,116 +1,112 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
-import { toast } from "sonner";
+import { useState } from "react"
+import Link from "next/link"
+import { useAuth } from "@/lib/auth-context"
+import { api } from "@/lib/api"
+import { toast } from "sonner"
+import { Sparkles, Eye, EyeOff } from "lucide-react"
 
 export default function SignupPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { login } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const { login } = useAuth()
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
     try {
-      const res = await api.post("/auth/register", { name, email, password });
-      login(res.token, res.user);
-      toast.success("Account created successfully!");
+      const res = await api.post("/auth/register", { name, email, password })
+      login(res.token, res.user)
+      toast.success("Account created successfully!")
     } catch (err: any) {
-      toast.error(err.message || "Failed to create account");
+      toast.error(err.message || "Failed to create account")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-fog flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-apricot-wash selection:text-ink">
-      <div className="sm:mx-auto sm:w-full sm:max-w-[440px]">
-        <Link href="/" className="font-signifier text-[22px] font-medium tracking-tight text-ink flex justify-center mb-8">
-          Steep
-        </Link>
-        <h2 className="text-center font-signifier text-[44px] text-ink leading-[1.1] tracking-[-0.66px]">
-          Create your account
-        </h2>
-        <p className="mt-4 text-center font-sohne text-[16px] text-ash tracking-[-0.14px]">
-          Already have an account?{" "}
-          <Link href="/login" className="font-[500] text-ink hover:text-graphite transition-colors underline decoration-dove underline-offset-4">
-            Sign in
-          </Link>
-        </p>
+    <div className="flex min-h-screen bg-fog">
+      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-ink to-ink/90 items-center justify-center p-12">
+        <div className="max-w-md text-center text-white">
+          <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+            <Sparkles className="h-8 w-8" />
+          </div>
+          <h2 className="text-3xl font-semibold mb-4">Start Automating Today</h2>
+          <p className="text-white/70 leading-relaxed">
+            Join thousands of businesses using Steep to transform their WhatsApp communication.
+          </p>
+        </div>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[440px]">
-        <div className="bg-pure-white py-10 px-8 shadow-subtle rounded-cards sm:px-12">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-12">
+        <div className="mx-auto w-full max-w-sm">
+          <Link href="/" className="flex items-center gap-2 mb-10">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink">
+              <Sparkles className="h-4 w-4 text-white" />
+            </div>
+            <span className="text-xl font-semibold">Steep</span>
+          </Link>
+
+          <div className="mb-8">
+            <h1 className="text-3xl font-semibold tracking-tight">Create your account</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link href="/login" className="font-medium text-ink underline underline-offset-4 hover:text-ink/80">
+                Sign in
+              </Link>
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="name" className="block font-sohne text-[14px] font-[500] text-ink mb-2">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="block w-full h-[44px] px-4 rounded-inputs border border-dove focus:outline-none focus:border-ink font-sohne text-[15px] text-ink placeholder-dove transition-colors"
+              <label htmlFor="name" className="block text-sm font-medium mb-1.5">Full Name</label>
+              <input id="name" type="text" autoComplete="name" required
+                value={name} onChange={(e) => setName(e.target.value)}
+                className="block w-full h-11 rounded-lg border border-input bg-white px-4 text-sm outline-none focus:border-ink transition-colors"
                 placeholder="Jane Doe"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block font-sohne text-[14px] font-[500] text-ink mb-2">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="block w-full h-[44px] px-4 rounded-inputs border border-dove focus:outline-none focus:border-ink font-sohne text-[15px] text-ink placeholder-dove transition-colors"
+              <label htmlFor="email" className="block text-sm font-medium mb-1.5">Email address</label>
+              <input id="email" type="email" autoComplete="email" required
+                value={email} onChange={(e) => setEmail(e.target.value)}
+                className="block w-full h-11 rounded-lg border border-input bg-white px-4 text-sm outline-none focus:border-ink transition-colors"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block font-sohne text-[14px] font-[500] text-ink mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="block w-full h-[44px] px-4 rounded-inputs border border-dove focus:outline-none focus:border-ink font-sohne text-[15px] text-ink placeholder-dove transition-colors"
-                placeholder="••••••••"
-              />
+              <label htmlFor="password" className="block text-sm font-medium mb-1.5">Password</label>
+              <div className="relative">
+                <input id="password" type={showPassword ? "text" : "password"} autoComplete="new-password" required
+                  value={password} onChange={(e) => setPassword(e.target.value)}
+                  className="block w-full h-11 rounded-lg border border-input bg-white px-4 pr-10 text-sm outline-none focus:border-ink transition-colors"
+                  placeholder="••••••••"
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-ink">
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full h-[44px] flex justify-center items-center rounded-buttons bg-ink text-pure-white font-sohne text-[15px] font-[450] tracking-[-0.009em] hover:opacity-90 transition-opacity disabled:opacity-70"
-              >
-                {loading ? "Signing up..." : "Sign up"}
-              </button>
-            </div>
+            <button type="submit" disabled={loading}
+              className="w-full h-11 rounded-lg bg-ink text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-70">
+              {loading ? "Signing up..." : "Sign up"}
+            </button>
+
+            <p className="text-xs text-muted-foreground text-center">
+              By signing up, you agree to our Terms of Service and Privacy Policy.
+            </p>
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 }
