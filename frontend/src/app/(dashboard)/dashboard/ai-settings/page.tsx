@@ -47,16 +47,14 @@ export default function AISettingsPage() {
     <div className="space-y-8 max-w-3xl">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">AI Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Configure your LLM provider and master system prompt.
-        </p>
+        <p className="text-sm text-ash mt-1">Configure your LLM provider and master system prompt.</p>
       </div>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
-              <Brain className="h-5 w-5 text-purple-700" />
+              <Brain className="h-5 w-5 text-purple-600" />
             </div>
             <div>
               <CardTitle>Model Configuration</CardTitle>
@@ -68,7 +66,7 @@ export default function AISettingsPage() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Provider</label>
             <Select value={provider} onValueChange={setProvider}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Select a provider" />
               </SelectTrigger>
               <SelectContent>
@@ -82,20 +80,20 @@ export default function AISettingsPage() {
           <div className="space-y-2">
             <label className="text-sm font-medium">API Key</label>
             <div className="relative">
-              <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input type="password" placeholder="sk-or-v1-..." className="pl-10"
+              <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
+              <Input type="password" placeholder="sk-or-v1-..." className="pl-10 bg-white"
                 value={apiKey} onChange={(e) => setApiKey(e.target.value)} disabled={useServerKey} />
             </div>
             <div className="flex items-center gap-2 mt-2">
               <Switch checked={useServerKey} onCheckedChange={setUseServerKey} />
-              <span className="text-xs text-muted-foreground">Use platform&apos;s default API key (Trial)</span>
+              <span className="text-xs text-ash">Use platform&apos;s default API key (Trial)</span>
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Model</label>
             <Select value={model} onValueChange={setModel}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>
@@ -109,11 +107,11 @@ export default function AISettingsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-              <MessageSquare className="h-5 w-5 text-blue-700" />
+              <MessageSquare className="h-5 w-5 text-blue-600" />
             </div>
             <div>
               <CardTitle>System Prompt</CardTitle>
@@ -122,17 +120,17 @@ export default function AISettingsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Textarea className="min-h-[200px]" value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)}
+          <Textarea className="min-h-[200px] bg-white" value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)}
             placeholder="You are a helpful customer support agent for Steep. You help users understand how to use the platform." />
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-                <Brain className="h-5 w-5 text-green-700" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+                <Brain className="h-5 w-5 text-emerald-600" />
               </div>
               <div>
                 <CardTitle>Isolated Context Memory</CardTitle>
@@ -145,7 +143,7 @@ export default function AISettingsPage() {
       </Card>
 
       <div className="flex justify-end">
-        <Button className="gap-2" onClick={handleSave} disabled={loading}>
+        <Button className="gap-2 rounded-full" onClick={handleSave} disabled={loading}>
           <Save className="h-4 w-4" />
           {loading ? "Saving..." : "Save Settings"}
         </Button>

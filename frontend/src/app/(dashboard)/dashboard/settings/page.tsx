@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react"
 import { api } from "@/lib/api"
-import { toast } from "sonner"
 import { User, Shield, Trash2 } from "lucide-react"
 
 export default function SettingsPage() {
@@ -21,16 +20,14 @@ export default function SettingsPage() {
     <div className="space-y-8 max-w-3xl">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Manage your account and workspace preferences.
-        </p>
+        <p className="text-sm text-ash mt-1">Manage your account and workspace preferences.</p>
       </div>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-              <User className="h-5 w-5 text-blue-700" />
+              <User className="h-5 w-5 text-blue-600" />
             </div>
             <div>
               <CardTitle>Profile Details</CardTitle>
@@ -43,27 +40,27 @@ export default function SettingsPage() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-apricot-wash text-xl font-medium text-ink uppercase">
               {profile.name?.slice(0, 2) || "UN"}
             </div>
-            <Button variant="outline">Change Avatar</Button>
+            <Button variant="outline" className="rounded-full">Change Avatar</Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-medium">Name</label>
-              <Input defaultValue={profile.name} disabled className="bg-muted cursor-not-allowed" />
+              <Input defaultValue={profile.name} disabled className="bg-fog cursor-not-allowed" />
             </div>
             <div className="space-y-2 md:col-span-2">
               <label className="text-sm font-medium">Email Address</label>
-              <Input type="email" defaultValue={profile.email} disabled className="bg-muted cursor-not-allowed" />
+              <Input type="email" defaultValue={profile.email} disabled className="bg-fog cursor-not-allowed" />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-              <Shield className="h-5 w-5 text-green-700" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+              <Shield className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
               <CardTitle>Security</CardTitle>
@@ -72,18 +69,18 @@ export default function SettingsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Button variant="outline">Change Password</Button>
+          <Button variant="outline" className="rounded-full">Change Password</Button>
         </CardContent>
       </Card>
 
-      <Card className="border-red-200">
+      <Card className="border border-red-200 shadow-sm">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
-              <Trash2 className="h-5 w-5 text-red-700" />
+              <Trash2 className="h-5 w-5 text-red-600" />
             </div>
             <div>
-              <CardTitle className="text-red-700">Danger Zone</CardTitle>
+              <CardTitle className="text-red-600">Danger Zone</CardTitle>
               <CardDescription>Irreversible and destructive actions.</CardDescription>
             </div>
           </div>
@@ -92,9 +89,9 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h4 className="text-sm font-medium">Delete Account</h4>
-              <p className="text-xs text-muted-foreground mt-1">Permanently remove your account and all data.</p>
+              <p className="text-xs text-ash mt-1">Permanently remove your account and all data.</p>
             </div>
-            <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">
+            <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50 rounded-full">
               Delete Account
             </Button>
           </div>

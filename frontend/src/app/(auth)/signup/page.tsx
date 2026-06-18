@@ -54,7 +54,7 @@ export default function SignupPage() {
 
           <div className="mb-8">
             <h1 className="text-3xl font-semibold tracking-tight">Create your account</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-ash">
               Already have an account?{" "}
               <Link href="/login" className="font-medium text-ink underline underline-offset-4 hover:text-ink/80">
                 Sign in
@@ -90,7 +90,7 @@ export default function SignupPage() {
                   placeholder="••••••••"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-ink">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ash hover:text-ink">
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
@@ -101,7 +101,7 @@ export default function SignupPage() {
               {loading ? "Signing up..." : "Sign up"}
             </button>
 
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-xs text-ash text-center">
               By signing up, you agree to our Terms of Service and Privacy Policy.
             </p>
           </form>

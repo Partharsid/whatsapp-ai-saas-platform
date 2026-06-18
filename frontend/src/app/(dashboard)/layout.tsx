@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Toaster position="bottom-right" />
       <Sidebar>
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-[1000px] mx-auto p-6 md:p-12">
+          <div className="max-w-[1000px] mx-auto p-6 md:p-10">
             {children}
           </div>
         </main>

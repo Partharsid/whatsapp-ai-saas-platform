@@ -41,7 +41,7 @@ export default function LoginPage() {
 
           <div className="mb-8">
             <h1 className="text-3xl font-semibold tracking-tight">Welcome back</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-ash">
               Don&apos;t have an account?{" "}
               <Link href="/signup" className="font-medium text-ink underline underline-offset-4 hover:text-ink/80">
                 Sign up
@@ -70,7 +70,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-ink">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ash hover:text-ink">
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
@@ -79,7 +79,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2">
                 <input type="checkbox" className="h-4 w-4 rounded border-input text-ink focus:ring-ink" />
-                <span className="text-muted-foreground">Remember me</span>
+                <span className="text-ash">Remember me</span>
               </label>
               <a href="#" className="font-medium text-ink underline underline-offset-4 hover:text-ink/80">
                 Forgot password?

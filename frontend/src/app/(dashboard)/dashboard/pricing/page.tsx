@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 const plans = [
   {
@@ -31,9 +32,9 @@ const plans = [
 export default function PricingPage() {
   return (
     <div className="space-y-8">
-      <div className="mx-auto max-w-2xl text-center mb-16">
+      <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-3xl font-semibold sm:text-4xl tracking-tight">Simple, transparent pricing</h1>
-        <p className="mt-4 text-muted-foreground">
+        <p className="mt-4 text-ash">
           Choose the plan that fits your needs. All plans include a 14-day free trial.
         </p>
       </div>
@@ -51,10 +52,10 @@ export default function PricingPage() {
             )}
             <div className="mb-6">
               <h3 className="text-xl font-semibold">{plan.name}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
+              <p className="mt-2 text-sm text-ash">{plan.description}</p>
               <div className="mt-4 flex items-baseline gap-1">
                 <span className="text-4xl font-bold">{plan.price}</span>
-                <span className="text-sm text-muted-foreground">/month</span>
+                <span className="text-sm text-ash">/month</span>
               </div>
             </div>
             <ul className="mb-8 flex-1 space-y-3">
@@ -65,7 +66,7 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <Button variant={plan.highlighted ? "default" : "outline"} className="w-full">
+            <Button variant={plan.highlighted ? "default" : "outline"} className="w-full rounded-full">
               Get Started
             </Button>
           </div>

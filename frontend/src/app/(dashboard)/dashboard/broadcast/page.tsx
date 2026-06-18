@@ -22,7 +22,7 @@ export default function BroadcastPage() {
     setLoading(true)
     try {
       await api.post("/dashboard/broadcasts", { name, message, status })
-      toast.success(`Campaign ${status === "DRAFT" ? "Saved as Draft" : "Scheduled"}`)
+      toast.success(`Campaign ${status === "DRAFT" ? "saved as draft" : "scheduled"}`)
       setName("")
       setMessage("")
     } catch (err: any) {
@@ -36,12 +36,10 @@ export default function BroadcastPage() {
     <div className="space-y-8 max-w-3xl">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Broadcast</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Send bulk WhatsApp template messages to your contacts.
-        </p>
+        <p className="text-sm text-ash mt-1">Send bulk WhatsApp template messages to your contacts.</p>
       </div>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <CardTitle>New Campaign</CardTitle>
           <CardDescription>Create a new broadcast campaign to send instantly or schedule for later.</CardDescription>
@@ -49,19 +47,19 @@ export default function BroadcastPage() {
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <label className="text-sm font-medium">Campaign Name</label>
-            <Input placeholder="e.g., Summer Sale Announcement" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input placeholder="e.g., Summer Sale Announcement" value={name} onChange={(e) => setName(e.target.value)} className="bg-white" />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Message Template</label>
-            <Textarea className="min-h-[150px]" placeholder="Hi {{name}}, our summer sale starts today! Get 50% off on all items."
+            <Textarea className="min-h-[150px] bg-white" placeholder='Hi {{name}}, our summer sale starts today! Get 50% off on all items.'
               value={message} onChange={(e) => setMessage(e.target.value)} />
-            <p className="text-xs text-muted-foreground">Use {"{{name}}"} to personalize the message.</p>
+            <p className="text-xs text-ash">Use {"{{name}}"} to personalize the message.</p>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Target Audience</label>
-            <div className="h-11 w-full rounded-lg border bg-muted/50 px-4 flex items-center text-sm text-muted-foreground">
+            <div className="h-11 w-full rounded-lg border bg-fog/50 px-4 flex items-center text-sm text-ash">
               All Contacts (4,521)
             </div>
           </div>
@@ -69,11 +67,11 @@ export default function BroadcastPage() {
       </Card>
 
       <div className="flex justify-end gap-4">
-        <Button variant="outline" className="gap-2" onClick={() => handleSave("DRAFT")} disabled={loading}>
+        <Button variant="outline" className="gap-2 rounded-full" onClick={() => handleSave("DRAFT")} disabled={loading}>
           <Save className="h-4 w-4" />
           Save Draft
         </Button>
-        <Button className="gap-2" onClick={() => handleSave("SCHEDULED")} disabled={loading}>
+        <Button className="gap-2 rounded-full" onClick={() => handleSave("SCHEDULED")} disabled={loading}>
           <Send className="h-4 w-4" />
           Review & Send
         </Button>
