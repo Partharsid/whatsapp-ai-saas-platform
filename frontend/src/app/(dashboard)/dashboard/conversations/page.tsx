@@ -1,69 +1,66 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { api } from "@/lib/api"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { MessageSquare, Clock, Search } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { MessageSquare, Bot } from "lucide-react";
 
 export default function ConversationsPage() {
-  const [conversations, setConversations] = useState<any[]>([])
-  const [search, setSearch] = useState("")
-
-  useEffect(() => {
-    api.get("/dashboard/conversations").then(setConversations).catch(console.error)
-  }, [])
-
-  const filtered = conversations.filter((c) =>
-    (c.contact?.name || c.contact?.phoneNumber || "").toLowerCase().includes(search.toLowerCase())
-  )
-
   return (
-    <div className="space-y-6 flex flex-col h-[calc(100vh-120px)]">
-      <div className="shrink-0">
-        <h1 className="text-3xl font-semibold tracking-tight">Conversations</h1>
-        <p className="text-sm text-ash mt-1">Manage your WhatsApp inbox and take over from AI.</p>
+    <div className="space-y-8 animate-in fade-in duration-500 h-full flex flex-col">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Live Conversations</h1>
+        <p className="text-gray-400 mt-2">Monitor AI interactions and take over manually.</p>
       </div>
 
-      <div className="relative max-w-sm shrink-0">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
-        <Input placeholder="Search conversations..." className="pl-10 rounded-full bg-white" value={search} onChange={(e) => setSearch(e.target.value)} />
-      </div>
-
-      {filtered.length === 0 ? (
-        <Card className="flex-1 border-0 shadow-sm">
-          <CardContent className="flex flex-col items-center justify-center h-full text-center py-16">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-fog mb-6">
-              <MessageSquare className="h-8 w-8 text-ash" />
-            </div>
-            <h2 className="text-xl font-semibold mb-2">No active conversations</h2>
-            <p className="text-sm text-ash max-w-sm">
-              Once your customers start messaging your WhatsApp number, their conversations will appear here.
-            </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-[500px]">
+        <Card className="col-span-1 bg-white/5 border-white/10 backdrop-blur-md flex flex-col">
+          <CardHeader>
+            <CardTitle className="text-white text-lg">Active Chats</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-y-auto space-y-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+                <div className="flex justify-between items-start">
+                  <h4 className="text-sm font-medium text-white">+1 (555) 000-{1000 + i}</h4>
+                  <span className="text-xs text-gray-500">2m</span>
+                </div>
+                <p className="text-xs text-gray-400 truncate mt-1">Yes, I would like to know more about pricing.</p>
+              </div>
+            ))}
           </CardContent>
         </Card>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 overflow-y-auto flex-1">
-          {filtered.map((conv) => (
-            <Card key={conv.id} className="p-4 border-0 shadow-sm hover:shadow-md hover:border-ink/20 transition-all cursor-pointer">
-              <div className="flex justify-between items-start mb-1.5">
-                <span className="font-medium text-sm">
-                  {conv.contact?.name || conv.contact?.phoneNumber}
-                </span>
-                <span className="flex items-center gap-1 text-xs text-ash shrink-0">
-                  <Clock className="h-3 w-3" />
-                  {conv.messages?.[0]?.timestamp
-                    ? new Date(conv.messages[0].timestamp).toLocaleDateString()
-                    : ""}
-                </span>
+
+        <Card className="col-span-2 bg-white/5 border-white/10 backdrop-blur-md flex flex-col">
+          <CardHeader className="border-b border-white/5 pb-4">
+            <CardTitle className="text-white text-lg flex items-center justify-between">
+              <span>+1 (555) 000-1001</span>
+              <div className="flex items-center gap-2">
+                <Bot className="w-4 h-4 text-primary" />
+                <span className="text-xs text-primary font-medium">AI Active</span>
               </div>
-              <p className="text-sm text-ash truncate">
-                {conv.messages?.[0]?.content || "No messages yet"}
-              </p>
-            </Card>
-          ))}
-        </div>
-      )}
+            </CardTitle>
+            <CardDescription className="text-gray-400">Bot is currently handling this conversation.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 flex flex-col justify-end p-6 space-y-4">
+            <div className="flex flex-col space-y-4 w-full">
+              <div className="flex w-full justify-start">
+                <div className="bg-white/10 rounded-2xl rounded-tl-sm p-3 max-w-[80%]">
+                  <p className="text-sm text-gray-200">Hi! I need help with my account.</p>
+                </div>
+              </div>
+              <div className="flex w-full justify-end">
+                <div className="bg-primary/20 border border-primary/30 rounded-2xl rounded-tr-sm p-3 max-w-[80%]">
+                  <p className="text-sm text-white">Hello! I am the AuraChat AI. I'd be happy to help you with your account. What specifically do you need assistance with?</p>
+                </div>
+              </div>
+            </div>
+            <div className="pt-4 mt-auto border-t border-white/5">
+              <div className="flex items-center justify-center p-4 border border-dashed border-white/20 rounded-lg text-gray-500 text-sm">
+                Takeover input disabled while AI is active. Toggle AI off to reply manually.
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  )
+  );
 }

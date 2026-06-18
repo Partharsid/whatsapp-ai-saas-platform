@@ -1,96 +1,82 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { api } from "@/lib/api"
-import { MessageSquare, Users, Bot, Smartphone, TrendingUp, ArrowRight } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { MessageSquare, Users, Activity, TrendingUp } from "lucide-react";
 
-export default function DashboardOverview() {
-  const [stats, setStats] = useState<any>(null)
-
-  useEffect(() => {
-    api.get("/dashboard/stats").then(setStats).catch(console.error)
-  }, [])
-
-  const statCards = [
-    { label: "Active Conversations", value: stats?.activeConversations ?? "-", icon: MessageSquare, color: "text-blue-600", bg: "bg-blue-100" },
-    { label: "Total Contacts", value: stats?.totalContacts ?? "-", icon: Users, color: "text-emerald-600", bg: "bg-emerald-100" },
-    { label: "AI Replies", value: stats?.aiRepliesSent ?? "-", icon: Bot, color: "text-purple-600", bg: "bg-purple-100" },
-    { label: "WhatsApp Status", value: stats?.waStatus ?? "-", icon: Smartphone, color: "text-amber-600", bg: "bg-amber-100" },
-  ]
-
+export default function DashboardPage() {
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Overview</h1>
-          <p className="text-sm text-ash mt-1">Your dashboard at a glance</p>
-        </div>
-        <Button className="gap-2 rounded-full">
-          <MessageSquare className="h-4 w-4" />
-          New Broadcast
-        </Button>
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
+        <p className="text-gray-400 mt-2">Welcome back to AuraChat. Here's what's happening today.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map((stat, i) => {
-          const Icon = stat.icon
-          return (
-            <Card key={i} className="border-0 shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-ash">{stat.label}</span>
-                  <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${stat.bg} ${stat.color}`}>
-                    <Icon className="h-4.5 w-4.5" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold">{stat.value}</div>
-              </CardContent>
-            </Card>
-          )
-        })}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle>Conversation Activity</CardTitle>
-            <CardDescription>Messages sent and received over the last 30 days.</CardDescription>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300">Total Conversations</CardTitle>
+            <MessageSquare className="h-4 w-4 text-primary" />
           </CardHeader>
-          <CardContent className="h-[280px] flex items-center justify-center border-t pt-6">
-            <div className="text-center">
-              <TrendingUp className="h-12 w-12 text-ash mx-auto mb-3" />
-              <p className="text-sm text-ash">Chart coming soon</p>
-            </div>
+          <CardContent>
+            <div className="text-2xl font-bold text-white">1,284</div>
+            <p className="text-xs text-gray-500 mt-1">+12% from last month</p>
           </CardContent>
         </Card>
-
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle>Top Regions</CardTitle>
-            <CardDescription>Where your messages are going.</CardDescription>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300">Active Contacts</CardTitle>
+            <Users className="h-4 w-4 text-emerald-500" />
           </CardHeader>
-          <CardContent className="space-y-5">
-            {[
-              { country: "India", count: "12.4k", pct: 45 },
-              { country: "United States", count: "5.2k", pct: 20 },
-              { country: "United Kingdom", count: "3.1k", pct: 15 },
-              { country: "Australia", count: "1.2k", pct: 8 },
-            ].map((region, i) => (
-              <div key={i} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium">{region.country}</span>
-                  <span className="text-ash">{region.count}</span>
-                </div>
-                <div className="h-1.5 bg-fog rounded-full overflow-hidden">
-                  <div className="h-full bg-ink rounded-full transition-all" style={{ width: `${region.pct}%` }} />
-                </div>
-              </div>
-            ))}
+          <CardContent>
+            <div className="text-2xl font-bold text-white">842</div>
+            <p className="text-xs text-gray-500 mt-1">+5% from last month</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300">AI Engagement Rate</CardTitle>
+            <Activity className="h-4 w-4 text-purple-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-white">94%</div>
+            <p className="text-xs text-gray-500 mt-1">+2% from last month</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-300">Messages Sent</CardTitle>
+            <TrendingUp className="h-4 w-4 text-blue-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-white">5,432</div>
+            <p className="text-xs text-gray-500 mt-1">+18% from last month</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 bg-white/5 border-white/10 backdrop-blur-md">
+          <CardHeader>
+            <CardTitle className="text-white">Recent Activity</CardTitle>
+            <CardDescription className="text-gray-400">Your bot's latest conversations in real-time.</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px] flex items-center justify-center border-t border-white/5">
+            <p className="text-gray-500 text-sm">Activity graph will render here.</p>
+          </CardContent>
+        </Card>
+        <Card className="col-span-3 bg-white/5 border-white/10 backdrop-blur-md">
+          <CardHeader>
+            <CardTitle className="text-white">Active Connections</CardTitle>
+            <CardDescription className="text-gray-400">WhatsApp numbers connected.</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px] flex items-center justify-center border-t border-white/5">
+            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 rounded-full">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-sm font-medium">+1 (555) 123-4567 connected</span>
+            </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

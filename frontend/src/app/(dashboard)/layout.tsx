@@ -1,29 +1,17 @@
-"use client"
+import { Sidebar } from "@/components/modern-side-bar";
 
-import { usePathname, useRouter } from "next/navigation"
-import { Toaster } from "@/components/ui/sonner"
-import { useAuth } from "@/lib/auth-context"
-import { Sidebar } from "@/components/dashboard-sidebar"
-
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter()
-  const { user, isLoading } = useAuth()
-
-  if (!isLoading && !user) {
-    router.push("/login")
-    return null
-  }
-
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="min-h-screen bg-fog flex selection:bg-sky-wash selection:text-ink">
-      <Toaster position="bottom-right" />
+    <div className="flex bg-black text-white min-h-screen selection:bg-primary/30">
       <Sidebar>
-        <main className="flex-1 overflow-y-auto">
-          <div className="max-w-[1000px] mx-auto p-6 md:p-10">
-            {children}
-          </div>
+        <main className="flex-1 p-6 lg:p-10 max-w-7xl mx-auto w-full">
+          {children}
         </main>
       </Sidebar>
     </div>
-  )
+  );
 }

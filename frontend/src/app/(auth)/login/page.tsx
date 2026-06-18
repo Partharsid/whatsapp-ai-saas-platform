@@ -1,110 +1,74 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useAuth } from "@/lib/auth-context"
-import { api } from "@/lib/api"
-import { toast } from "sonner"
-import { Sparkles, Eye, EyeOff } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const { login } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      const res = await api.post("/auth/login", { email, password })
-      login(res.token, res.user)
-      toast.success("Welcome back!")
-    } catch (err: any) {
-      toast.error(err.message || "Failed to login")
-    } finally {
-      setLoading(false)
-    }
-  }
+    e.preventDefault();
+    setIsLoading(true);
+    // TODO: Wire to /api/auth/login
+    setTimeout(() => {
+      setIsLoading(false);
+      router.push("/dashboard");
+    }, 1000);
+  };
 
   return (
-    <div className="flex min-h-screen bg-fog">
-      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-12">
-        <div className="mx-auto w-full max-w-sm">
-          <Link href="/" className="flex items-center gap-2 mb-10">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-semibold">Steep</span>
-          </Link>
-
-          <div className="mb-8">
-            <h1 className="text-3xl font-semibold tracking-tight">Welcome back</h1>
-            <p className="mt-2 text-sm text-ash">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="font-medium text-ink underline underline-offset-4 hover:text-ink/80">
-                Sign up
-              </Link>
-            </p>
+    <Card className="w-full bg-black/40 backdrop-blur-xl border-white/10 shadow-2xl">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-bold tracking-tight text-white">Welcome back</CardTitle>
+        <CardDescription className="text-gray-400">
+          Enter your email to sign in to your account
+        </CardDescription>
+      </CardHeader>
+      <form onSubmit={handleSubmit}>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-gray-300">Email</Label>
+            <Input 
+              id="email" 
+              type="email" 
+              placeholder="m@example.com" 
+              required 
+              className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:ring-primary/50"
+            />
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1.5">Email address</label>
-              <input
-                id="email" type="email" autoComplete="email" required
-                value={email} onChange={(e) => setEmail(e.target.value)}
-                className="block w-full h-11 rounded-lg border border-input bg-white px-4 text-sm outline-none focus:border-ink transition-colors"
-                placeholder="you@example.com"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-1.5">Password</label>
-              <div className="relative">
-                <input
-                  id="password" type={showPassword ? "text" : "password"} autoComplete="current-password" required
-                  value={password} onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full h-11 rounded-lg border border-input bg-white px-4 pr-10 text-sm outline-none focus:border-ink transition-colors"
-                  placeholder="••••••••"
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ash hover:text-ink">
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="h-4 w-4 rounded border-input text-ink focus:ring-ink" />
-                <span className="text-ash">Remember me</span>
-              </label>
-              <a href="#" className="font-medium text-ink underline underline-offset-4 hover:text-ink/80">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-gray-300">Password</Label>
+              <Link href="/forgot-password" className="text-sm font-medium text-primary hover:text-primary/80">
                 Forgot password?
-              </a>
+              </Link>
             </div>
-
-            <button type="submit" disabled={loading}
-              className="w-full h-11 rounded-lg bg-ink text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-70">
-              {loading ? "Signing in..." : "Sign in"}
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-ink to-ink/90 items-center justify-center p-12">
-        <div className="max-w-md text-center text-white">
-          <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
-            <Sparkles className="h-8 w-8" />
+            <Input 
+              id="password" 
+              type="password" 
+              required 
+              className="bg-white/5 border-white/10 text-white focus-visible:ring-primary/50"
+            />
           </div>
-          <h2 className="text-3xl font-semibold mb-4">AI-Powered Conversations</h2>
-          <p className="text-white/70 leading-relaxed">
-            Steep automates your WhatsApp with intelligent AI, maintaining personalized context for every customer.
-          </p>
-        </div>
-      </div>
-    </div>
-  )
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4 mt-2">
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Signing in..." : "Sign in"}
+          </Button>
+          <div className="text-sm text-center text-gray-400">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="text-primary hover:text-primary/80 font-medium">
+              Sign up
+            </Link>
+          </div>
+        </CardFooter>
+      </form>
+    </Card>
+  );
 }
