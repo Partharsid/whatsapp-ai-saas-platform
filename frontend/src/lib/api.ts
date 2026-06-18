@@ -20,14 +20,14 @@ api.interceptors.request.use((config) => {
 });
 
 export const AuthAPI = {
-  login: async (data: any) => {
+  login: async (data: Record<string, unknown>) => {
     const response = await api.post('/auth/login', data);
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
     }
     return response.data;
   },
-  register: async (data: any) => {
+  register: async (data: Record<string, unknown>) => {
     const response = await api.post('/auth/register', data);
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
@@ -44,6 +44,6 @@ export const DashboardAPI = {
   getContacts: () => api.get('/dashboard/contacts'),
   getConversations: () => api.get('/dashboard/conversations'),
   getAiConfig: () => api.get('/dashboard/ai/config'),
-  updateAiConfig: (data: any) => api.put('/dashboard/ai/config', data),
+  updateAiConfig: (data: Record<string, unknown>) => api.put('/dashboard/ai/config', data),
   getWhatsAppStatus: () => api.get('/dashboard/whatsapp/status'),
 };

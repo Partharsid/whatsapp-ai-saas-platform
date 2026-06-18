@@ -46,8 +46,7 @@ export default function HeroBadge({
 }: HeroBadgeProps) {
   const controls = useAnimation();
 
-  const BadgeWrapper = href ? Link : motion.button;
-  const wrapperProps = href ? { href } : { onClick };
+
 
   const baseClassName = cn(
     "inline-flex items-center rounded-full border transition-colors",
@@ -61,6 +60,7 @@ export default function HeroBadge({
       className={baseClassName}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       transition={{ duration: 0.8, ease: ease as any }}
       onHoverStart={() => controls.start("hover")}
       onHoverEnd={() => controls.start("initial")}

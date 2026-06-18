@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { MessageSquare, Bot } from "lucide-react";
+import { Bot } from "lucide-react";
 
 export default function ConversationsPage() {
   return (
@@ -49,7 +49,7 @@ export default function ConversationsPage() {
               </div>
               <div className="flex w-full justify-end">
                 <div className="bg-primary/20 border border-primary/30 rounded-2xl rounded-tr-sm p-3 max-w-[80%]">
-                  <p className="text-sm text-white">Hello! I am the AuraChat AI. I'd be happy to help you with your account. What specifically do you need assistance with?</p>
+                  <p className="text-sm text-white">Hello! I am the AuraChat AI. I&apos;d be happy to help you with your account. What specifically do you need assistance with?</p>
                 </div>
               </div>
             </div>

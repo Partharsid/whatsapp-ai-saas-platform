@@ -34,13 +34,14 @@ const Footer: React.FC<FooterProps> = ({
       { threshold: 0.2 } 
     );
 
-    if (footerRef.current) {
-      observer.observe(footerRef.current);
+    const currentRef = footerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (footerRef.current) {
-        observer.unobserve(footerRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);

@@ -8,7 +8,7 @@ export default function DashboardPage() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
-        <p className="text-gray-400 mt-2">Welcome back to AuraChat. Here's what's happening today.</p>
+        <p className="text-gray-400 mt-2">Welcome back to AuraChat. Here&apos;s what&apos;s happening today.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -58,7 +58,7 @@ export default function DashboardPage() {
         <Card className="col-span-4 bg-white/5 border-white/10 backdrop-blur-md">
           <CardHeader>
             <CardTitle className="text-white">Recent Activity</CardTitle>
-            <CardDescription className="text-gray-400">Your bot's latest conversations in real-time.</CardDescription>
+            <CardDescription className="text-gray-400">Your bot&apos;s latest conversations in real-time.</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px] flex items-center justify-center border-t border-white/5">
             <p className="text-gray-500 text-sm">Activity graph will render here.</p>
