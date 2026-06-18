@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   /* Colors */
   --color-ink: #17191c;
@@ -90,4 +92,31 @@
   h1, h2, h3, h4, h5, h6 {
     @apply text-balance;
   }
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes appear-zoom {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@utility animate-appear {
+  animation: appear 0.6s ease-out forwards;
+}
+
+@utility animate-appear-zoom {
+  animation: appear-zoom 0.6s ease-out forwards;
+}
+
+@utility max-w-container {
+  max-width: 1200px;
+}
+
+@utility fade-bottom {
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }

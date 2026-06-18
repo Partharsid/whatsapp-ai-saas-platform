@@ -73,8 +73,8 @@ export default function LandingPage() {
           { text: "Learn More", href: "#features", variant: "glow" },
         ]}
         image={{
-          light: "/hero-light.png",
-          dark: "/hero-dark.png",
+          light: "/hero-light.svg",
+          dark: "/hero-dark.svg",
           alt: "Steep Dashboard Preview",
         }}
       />
