@@ -11,7 +11,7 @@ export class RazorpayService {
     try {
       const options = {
         plan_id: planId,
-        customer_notify: 1,
+        customer_notify: 1 as 1,
         total_count: 12, // 1 year by default
       };
       
