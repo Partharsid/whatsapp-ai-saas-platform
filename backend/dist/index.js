@@ -11,6 +11,7 @@ const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const sessionManager_1 = require("./whatsapp/sessionManager");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
@@ -28,6 +29,7 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json());
 app.use('/api/auth', authRoutes_1.default);
+app.use('/api/dashboard', dashboardRoutes_1.default);
 const sessionManager = new sessionManager_1.SessionManager(io);
 // Basic health check route
 app.get('/health', (req, res) => {

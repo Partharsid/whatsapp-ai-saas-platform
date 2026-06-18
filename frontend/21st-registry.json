@@ -1,0 +1,52 @@
+[
+  {
+    "name": "button",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "card",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "input",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "textarea",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "select",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "switch",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "avatar",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "sheet",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "table",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  },
+  {
+    "name": "sonner",
+    "sourceType": "direct_name",
+    "addedByCLI": true
+  }
+]

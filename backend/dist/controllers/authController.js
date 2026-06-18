@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
 const prisma_1 = require("../utils/prisma");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const register = async (req, res) => {
     try {
         const { email, password, name } = req.body;
@@ -13,11 +14,12 @@ const register = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
-        // Hash password in real app! using plain text here for MVP simplicity
+        const salt = await bcryptjs_1.default.genSalt(10);
+        const hashedPassword = await bcryptjs_1.default.hash(password, salt);
         const user = await prisma_1.prisma.user.create({
             data: {
                 email,
-                passwordHash: password,
+                passwordHash: hashedPassword,
                 name,
             },
         });
@@ -44,8 +46,8 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(400).json({ error: 'Invalid credentials' });
         }
-        // Verify password in real app!
-        if (user.passwordHash !== password) {
+        const isMatch = await bcryptjs_1.default.compare(password, user.passwordHash);
+        if (!isMatch) {
             return res.status(400).json({ error: 'Invalid credentials' });
         }
         const token = jsonwebtoken_1.default.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });

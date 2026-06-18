@@ -1,96 +1,114 @@
-'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Toaster } from "@/components/ui/sonner";
+import { Menu, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
+  const { user, isLoading, logout } = useAuth();
+
+  // Protect route
+  if (!isLoading && !user) {
+    router.push("/login");
+    return null;
+  }
 
   const navigation = [
-    { name: 'Overview', href: '/dashboard', icon: '📊' },
-    { name: 'WhatsApp Connect', href: '/dashboard/connect', icon: '📱' },
-    { name: 'Conversations', href: '/dashboard/conversations', icon: '💬' },
-    { name: 'Contacts', href: '/dashboard/contacts', icon: '👥' },
-    { name: 'Broadcast', href: '/dashboard/broadcast', icon: '📢' },
-    { name: 'AI Settings', href: '/dashboard/ai-settings', icon: '🤖' },
-    { name: 'Billing', href: '/dashboard/billing', icon: '💳' },
-    { name: 'Settings', href: '/dashboard/settings', icon: '⚙️' },
+    { name: "Overview", href: "/dashboard", icon: "📊" },
+    { name: "WhatsApp Connect", href: "/dashboard/connect", icon: "📱" },
+    { name: "Conversations", href: "/dashboard/conversations", icon: "💬" },
+    { name: "Contacts", href: "/dashboard/contacts", icon: "👥" },
+    { name: "Broadcast", href: "/dashboard/broadcast", icon: "📢" },
+    { name: "AI Settings", href: "/dashboard/ai-settings", icon: "🤖" },
+    { name: "Billing", href: "/dashboard/pricing", icon: "💳" },
+    { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
   ];
 
-  return (
-    <div className="h-screen flex overflow-hidden bg-slate-950 text-slate-50">
-      {/* Sidebar for Desktop */}
-      <div className="hidden md:flex md:flex-shrink-0">
-        <div className="flex flex-col w-64 border-r border-slate-800 bg-slate-900/50 backdrop-blur-xl">
-          <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
-            <div className="flex items-center flex-shrink-0 px-6 mb-8 gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <span className="font-bold text-xl tracking-tight">ParakeetClone</span>
+  const SidebarContent = () => (
+    <>
+      <div className="h-[72px] flex items-center px-6 border-b border-dove/30 shrink-0">
+        <Link href="/" className="font-signifier text-[22px] font-medium tracking-tight text-ink">
+          Steep
+        </Link>
+      </div>
+      
+      <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <div className="px-2 mb-3">
+          <h3 className="font-sohne text-[13px] font-[500] uppercase tracking-[0.5px] text-graphite">Menu</h3>
+        </div>
+        {navigation.map((item) => {
+          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-[15px] font-sohne font-[450] transition-colors ${
+                isActive 
+                  ? "bg-pure-white text-ink shadow-[0_1px_2px_rgba(0,0,0,0.04)] border border-dove/20" 
+                  : "text-ink hover:bg-dove/10"
+              }`}
+            >
+              <span className="text-[16px] opacity-70 grayscale">{item.icon}</span>
+              {item.name}
+            </Link>
+          );
+        })}
+      </nav>
+      
+      <div className="p-4 border-t border-dove/30 shrink-0">
+        <div className="flex items-center justify-between px-2 py-2">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-8 h-8 rounded-avatars bg-apricot-wash shrink-0 flex items-center justify-center text-ink text-[13px] font-[500] uppercase">
+              {user?.name?.slice(0, 2) || "UN"}
             </div>
-            <nav className="mt-2 flex-1 px-4 space-y-2">
-              {navigation.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`${
-                      isActive
-                        ? 'bg-indigo-600/10 text-indigo-400 border border-indigo-500/20'
-                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent'
-                    } group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all`}
-                  >
-                    <span className="mr-3 text-lg">{item.icon}</span>
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-          
-          <div className="p-4 border-t border-slate-800">
-            <div className="flex items-center w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700">
-              <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-sm font-bold">
-                U
-              </div>
-              <div className="ml-3 flex-1 overflow-hidden">
-                <p className="text-sm font-medium text-white truncate">User Name</p>
-                <p className="text-xs text-slate-400 truncate">user@example.com</p>
-              </div>
+            <div className="overflow-hidden">
+              <p className="font-sohne text-[14px] font-[500] text-ink truncate">{user?.name || "User"}</p>
+              <p className="font-sohne text-[13px] text-graphite truncate">{user?.email}</p>
             </div>
           </div>
+          <button onClick={logout} className="p-2 text-ash hover:text-ink hover:bg-dove/10 rounded-buttons transition-colors">
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <div className="min-h-screen bg-fog flex selection:bg-sky-wash selection:text-ink">
+      <Toaster position="bottom-right" />
+      
+      {/* Desktop Sidebar */}
+      <aside className="w-[240px] flex-shrink-0 border-r border-dove/30 bg-fog hidden md:flex flex-col">
+        <SidebarContent />
+      </aside>
 
       {/* Main Content Area */}
-      <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        {/* Top Header */}
-        <div className="relative z-10 flex-shrink-0 flex h-16 bg-slate-900 border-b border-slate-800 md:hidden">
-          <button
-            type="button"
-            className="px-4 border-r border-slate-800 text-slate-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            <span className="sr-only">Open sidebar</span>
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-          </button>
-          <div className="flex-1 px-4 flex justify-between">
-            <div className="flex items-center">
-              <span className="font-bold text-lg">ParakeetClone</span>
-            </div>
-          </div>
-        </div>
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Mobile Header */}
+        <header className="h-[72px] flex items-center justify-between px-6 border-b border-dove/30 bg-pure-white md:hidden">
+          <span className="font-signifier text-[22px] font-medium tracking-tight text-ink">Steep</span>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="p-2 -mr-2 text-ink hover:bg-fog rounded-buttons transition-colors">
+                <Menu className="w-6 h-6" />
+                <span className="sr-only">Toggle Menu</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[280px] p-0 flex flex-col bg-fog">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <SidebarContent />
+            </SheetContent>
+          </Sheet>
+        </header>
 
-        {/* Page Content */}
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
-          <div className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-[1000px] mx-auto p-6 md:p-12">
             {children}
           </div>
         </main>

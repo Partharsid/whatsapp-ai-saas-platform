@@ -6,6 +6,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import { SessionManager } from './whatsapp/sessionManager';
 import authRoutes from './routes/authRoutes';
+import dashboardRoutes from './routes/dashboardRoutes';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 const sessionManager = new SessionManager(io);
 
